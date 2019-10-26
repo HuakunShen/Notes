@@ -229,7 +229,7 @@ Instead of making 'instances' or copies of classes and putting them in some hier
 
 
 
-## Prototyles
+## Prototypes
 
 Prototypes are objects that are used by other objects to add delegate properties 
 
@@ -246,6 +246,47 @@ Main purpose of a prototype is for fast object creation
 - Similar to constructors in `Java`
 - Functions have their own prototype property that is used for object creation
 
+## `__proto__` and `prototype`
+
+- `__proto__` is the property of an object that points to the object's prototype
+- `prototype` is the property of a **function** that is used as the prototype to add to the new object when that function is called **as a constructor** 
+
+```js
+function sayName() {
+  log("My name is " + this.firstName);
+}
+
+const person = {
+  sayName: sayName
+};
+
+person.sayName();		// undefined, since firstName doesn't exist
+
+const student = {
+  firstName: "James"
+};
+Object.setPrototypeOf(student, person);
+student.sayName();	// My name is James
+// student now has prototype person
+```
+
+<img src="Javascript.assets/image-20191025205338697.png" alt="image-20191025205338697" style="zoom:50%;" />
+
+student's `__proto__` refers to person. person's `__proto__` refers to the base Object.
+
+```js
+const partTimeStudent = {
+  numCourses: 2
+};
+
+Object.setPrototypeOf(partTimeStudent, student);
+partTimeStudent.sayName();	// My name is James
+```
+
+<img src="Javascript.assets/image-20191025205643075.png" alt="image-20191025205643075" style="zoom:50%;" />
+
+partTimeStudent has `__proto__` student (with `firstName`), student has `__proto__` person (with `sayName()`).
+
 ## `new` keyword
 
 What does `new` do?
@@ -255,10 +296,25 @@ What does `new` do?
 3. Call the constructor function with `this` set to the new object
 4. Return the object
 
-## `__proto__` and `prototype`
+## Constructor
 
-- `__proto__` is the property of an object that points to the object's prototype
-- `prototype` is the property of a **function** that is used as the prototype to add to the new object when that function is called **as a constructor** 
+```js
+// A constructor function
+// Notice: Student has capital "S", to distinguish from student above
+function Student(firstName, lastName) {
+  this.firstName = firstName;
+  this.lastName = lastName;
+}
+
+Student.prototype.sayLastName = function() {
+  log("My last name is " + this.lastName);
+};
+
+const student2 = new Student("Jimmy", "Parker");
+student2.sayLastName();		// My last name is Parker
+```
+
+<img src="Javascript.assets/image-20191025210549007.png" alt="image-20191025210549007" style="zoom:50%;" />
 
 ## `Object.create()`
 
@@ -268,6 +324,13 @@ What does `new` do?
   - But remember - all of their prototypes will point to the same reference
     - No instances or copies
 
+```js
+const student3 = Object.create(student);
+student3.sayName();		// MY NAME IS James
+// if you don't remember what student is, refer to previous code
+// student is just an object, with __proto__ -> person who has a sayName function in its __proto__
+```
+
 ## Class
 
 - ES6 supports the `class` keyword
@@ -275,6 +338,59 @@ What does `new` do?
 - Mostly, it’s just a neat way to repackage prototypes and object creation in a way that’s more digestible for object-oriented programmers
   - No private variables
 - JavaScript does not have classes
+
+```js
+class Instructor {
+  constructor(firstName, course) {
+    this.firstName = firstName;
+    this.course = course;
+  }
+
+  whatsMyCourse() {
+    return this.course;
+  }
+}
+```
+
+**Equivalent**
+
+```js
+function Instructor(firstName, course) {
+  this.firstName = firstName;
+  this.course = course;
+}
+
+Instructor.prototype.whatsMyCourse = function() {
+  return this.course;
+};
+```
+
+```js
+const jen = new Instructor("Jen", "CSC108");
+log(jen.whatsMyCourse());	// CSC108
+```
+
+```js
+class Person {
+  constructor(firstName) {
+    this.firstName = firstName;
+  }
+}
+
+class Instructor2 extends Person {
+  constructor(firstName, course) {
+    super(firstName);
+    this.course = course;
+  }
+
+  whatsMyCourse() {
+    return this.course;
+  }
+}
+
+const jen2 = new Instructor2("Jen2", "CSC108");
+log(jen2.whatsMyCourse());		// CSC108
+```
 
 
 
