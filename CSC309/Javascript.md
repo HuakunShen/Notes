@@ -66,8 +66,68 @@ function f() {
   - Available to everyone in lexical scope.
 
   - Hard to manage
-
 * Add `"use strict"` at top to catch errors, such as defining variables before declaring.
+
+```js
+(function() {
+  "use strict";
+  function foo() {
+    var a = 7;
+    function bar() {
+      console.log(a);
+      var a = 3;
+    }
+    bar();
+  }
+})();			// undefined
+```
+
+On line 7, `var a` gets hoisted to the beginning of `function bar()`, which is the same as the code below.
+
+```js
+function bar() {
+    var a;
+	console.log(a);
+	a = 3;
+}
+```
+
+The code below would work.
+
+```js
+function foo() {
+  var a = 7;
+  function bar() {
+    console.log(a);
+  }
+  bar();
+}
+foo();			// 7
+```
+
+```js
+var s = "hello";
+(function() {
+  console.log("Value before: " + s);
+  var s = "hi";
+  console.log("Value after: " + s);
+})();
+// output
+/*
+Value before: undefined
+Value after: hi
+*/
+
+// Equivalent
+var s = "hello";
+// The hoist
+(function() {
+  var s;
+  console.log("Value before: " + s);
+  s = "hi";
+  console.log("Value after: " + s);
+})();
+```
 
 ## ES6
 
@@ -164,6 +224,28 @@ bar();	// 5
 
 In case 2, since a is defined before `inner()` is defined, `inner()` can access `a`. Since `a` is modified to 5 before `inner` is returned, `a=5` is carried when returned.
 
+**Another Example**
+
+```js
+const stringAdder = function() {
+  let x = "";
+  return function(s) {
+    x = x + s;
+    return x;
+  };
+};
+
+adder = stringAdder();
+adder("U");					// "U"
+adder("of");				// "Uof"
+adder("T");					// "UofT"
+
+adder2 = stringAdder();
+adder2("new");				// "new"
+```
+
+For each new String Adder, the closure "x" will be a new one.
+
 ### Arrays
 
 ```js
@@ -215,7 +297,54 @@ What is `this` keyword?
   - Value of this is not obvious from reading function definition
 - Can be changed by using `bind()`, `call()`, `apply()`
 
+## `bind` and `call`
+
+```js
+var getName = function() {
+  return this.name;
+};
+var student = {
+  name: "James",
+  myName: getName
+};
+
+student.myName();		// "James"
+ourGetName = student.myName;	
+ourGetName();			// undefined
+
+ourGetName.bind(student)();		// "James"
+ourGetName.call(student);		// "James"
+```
+
+`bind` binds student to function `ourGetName`, and return the new function. Add `()` to evolke.
+
+`call` binds student to function `ourGetName`, and call it. The output of the new function gets returned.
+
 ## "Object-Oriented" JS
+
+### Object Scope
+
+``` js
+const myObject = {
+  myVar: "bar",
+  func: function() {
+    const a = 5;
+    (function() {
+      console.log("this.myVar = " + this.myVar);
+      console.log("a = " + a);
+      return 1;
+    })();
+  }
+};
+myObject.func();
+// output:
+// this.myVar = undefined
+// a = 5
+```
+
+`this` on line 6 is not undefined, otherwise, it's gonna be an error.
+
+`this` on line 6 actually refers to `Window` object, but `Window` doesn't have `myVar`, thus output undefined.
 
 ### Classes
 
@@ -227,9 +356,7 @@ Instead of making 'instances' or copies of classes and putting them in some hier
 - If a property can’t be found in an object, JS looks for that property in a *delegate object*
   - Delegate objects can be chained 
 
-
-
-## Prototypes
+### Prototypes
 
 Prototypes are objects that are used by other objects to add delegate properties 
 
@@ -246,7 +373,7 @@ Main purpose of a prototype is for fast object creation
 - Similar to constructors in `Java`
 - Functions have their own prototype property that is used for object creation
 
-## `__proto__` and `prototype`
+### `__proto__` and `prototype`
 
 - `__proto__` is the property of an object that points to the object's prototype
 - `prototype` is the property of a **function** that is used as the prototype to add to the new object when that function is called **as a constructor** 
@@ -287,7 +414,7 @@ partTimeStudent.sayName();	// My name is James
 
 partTimeStudent has `__proto__` student (with `firstName`), student has `__proto__` person (with `sayName()`).
 
-## `new` keyword
+### `new` keyword
 
 What does `new` do?
 
@@ -296,7 +423,7 @@ What does `new` do?
 3. Call the constructor function with `this` set to the new object
 4. Return the object
 
-## Constructor
+### Constructor
 
 ```js
 // A constructor function
@@ -316,7 +443,7 @@ student2.sayLastName();		// My last name is Parker
 
 <img src="Javascript.assets/image-20191025210549007.png" alt="image-20191025210549007" style="zoom:50%;" />
 
-## `Object.create()`
+### `Object.create()`
 
 - Another way to create objects using prototypes is by using `Object.create(o)`
   - Creates an object with `o` as the prototype
@@ -331,7 +458,7 @@ student3.sayName();		// MY NAME IS James
 // student is just an object, with __proto__ -> person who has a sayName function in its __proto__
 ```
 
-## Class
+### Class
 
 - ES6 supports the `class` keyword
 - But the `class` is not really a real `class`
@@ -394,29 +521,124 @@ log(jen2.whatsMyCourse());		// CSC108
 
 
 
+## More Examples
 
+### Closure and Hoisting
 
+1. Example:
 
+    ```js
+    var b = 1;
+    function outer() {
+      var b = 2;
+      function inner() {
+        b++;
+        var b = 3;
+        console.log(b);
+      }
+      inner();
+    }
+    outer(); 		// 3
+    ```
 
+2. Create a function makeAdder(a) that returns a function that adds a to a given number. E.g:
 
+    ```js
+    const addTwo = makeAdder(2)
+    addTwo(3) // 5
+    const addThree = makeAdder(3)
+    addThree(4) // 7
+    addThree(4) // 7 (doesn’t keep adding)
+    ```
 
+    **Solution:**
 
+    ```js
+    function makeAdder(num) {
+        let t = num;
+        function add(new_num) {
+            if (t + new_num < 7) {
+                t += new_num;
+                return t;    
+            } else {
+                return 7;
+            }
+        }
+        return add;    
+    }
+    ```
 
+3. What is the output of the following code?
 
+   ```js
+   (function(a) {
+     return (function(b) {
+       console.log(a);
+     })(2);
+   })(1);
+   ```
 
+   Output: 1
+   
+   b is not used, a is closure.
 
+### Objects
 
+1. ```js
+   const student = {
+     name: "Sally",
+     getName: function() {
+       return this.name;
+     }
+   };
+   const g = student.getName;
+   console.log(g()); 					// undefined
+   console.log(student.getName());		// "Sally"
+   ```
 
+2. ```js
+   const num_toppings = function() {
+     return this.toppings.length;
+   };
+   const pizza1 = {
+     toppings: ["cheese", "pepperoni", "mushrooms"],
+     getNumToppings: num_toppings
+   };
+   const pizza2 = {
+     toppings: ["pineapple"],
+     getNumToppings: pizza1.getNumToppings
+   };
+   const a = pizza1.getNumToppings(); // value of a? 								--- 3
+   const b = pizza2.getNumToppings(); // value of a? 								--- 1
+   const c = num_toppings(); // value of a? 										--- error
+   const d = num_toppings.bind(pizza1);
+   const e = d(); // value of e? (or error?)										--- 3
+   const k = pizza1.getNumToppings.call(pizza2); // value of k? (or error?)		--- 1
+   ```
 
+3. ```js
+   const students = {
+     student1: {
+       name: "James",
+       friend: {
+         name: "Jimmy"
+       }
+     },
+     student2: {
+       name: "Jen",
+       getNameFunc: function() {
+         return this.name;
+       }
+     }
+   };
+   ```
 
+   How can you get student1's friend's name ("Jimmy") by using student2's getNameFunc?
 
+   
 
+   **Solution:**
 
-
-
-
-
-
-
-
-
+   ```js
+   students["student2"].getNameFunc.call(students["student1"]["friend"]);
+   ```
