@@ -115,6 +115,20 @@ Functions in JS are "first-class" objects
 
 Essentially used as a value anywhere values are used.
 
+### Two ways of defining function
+
+```js
+function f1() {
+  console.log("test");
+}
+
+let f2 = function() {
+  console.log("test");
+}
+```
+
+
+
 ### Anonymous function
 
 - Functions can be passed around without names
@@ -138,11 +152,11 @@ Essentially used as a value anywhere values are used.
 ```js
 // Case 1
 function foo() {
-  let a = 2;
-  function inner() {
-    console.log(a); // 2
-  }
-  return inner;
+    let a = 2;
+    function inner() {
+        console.log(a); // 2
+    }
+    return inner;
 }
 const bar = foo(); // foo returns a function inner()
 bar();	// 2
@@ -150,12 +164,12 @@ bar();	// 2
 
 // Case 2
 function foo() {
-  let a = 2;
-  function inner() {
-    console.log(a); // 2
-  }
-  a = 5;
-  return inner;
+	let a = 2;
+    function inner() {
+        console.log(a); // 2
+    }
+    a = 5;
+    return inner;
 }
 const bar = foo(); // foo returns a function inner()
 bar();	// 5
@@ -163,6 +177,64 @@ bar();	// 5
 ```
 
 In case 2, since a is defined before `inner()` is defined, `inner()` can access `a`. Since `a` is modified to 5 before `inner` is returned, `a=5` is carried when returned.
+
+```js
+// Another Example
+function createCounter() {
+	let count = 0;
+	return function () {
+		count += 1;
+		return count;
+	}
+}
+const tmp = createCounter();	
+/*
+ƒ () {
+		count += 1;
+		return count;
+	}
+*/
+tmp()	// 1
+```
+
+```js
+// Intend to print 1,2,3,4,5
+for (var i = 1; i <= 5; i++) {
+	setTimeout(function () {
+		log(i);
+	}, i * 1000);
+}
+// The above code will print 5 6's, due to closure. i reference to the same variable, which becomes 6 before the first setTimeout callback is activated
+
+for (var i = 1; i <= 5; i++) {
+	(function () {
+		const j = i; // j is function scoped in the anonymous function
+		setTimeout(function () {
+			log(j);
+		}, i * 1000);
+	})();
+}
+
+for (var i = 1; i <= 5; i++) {
+    setTimeout(function(index) {
+        return function() {
+            console.log(index);
+        };
+    }(i), 1000 * i);
+}
+// The above two for loops are the same and will print 1, 2, 3, 4, 5
+// j is the closure, instead of i
+// Each setTimeout's closure is a different j, not the same number, thus won't repeat
+
+// The following code uses "let" instead of var
+// let uses block scope
+for (let i = 1; i <= 5; i++) {
+	setTimeout(function () {
+		log(i);
+	}, i * 1000);
+}
+// This would print 1, 2, 3, 4, 5
+```
 
 ### Arrays
 
@@ -172,7 +244,7 @@ const a = [1, "hi", function() {}];
 a[0];
 // Mutable
 a[1] = 50;
-a.length	// length
+a.length;	// length
 
 typeof(a)	// "object", not a primitive type
 ```
@@ -201,7 +273,7 @@ student.age = 20;
 ```js
 const student = { name: ‘Jimmy’, year: 2}; 
 student.sayName = function() {
-  console.log("My name is " + this.name);
+	console.log("My name is " + this.name);
 }
 student.sayName();	// "My name is Jummy"
 ```
@@ -226,6 +298,63 @@ Instead of making 'instances' or copies of classes and putting them in some hier
 - JS works on a ***delegation*** framework
 - If a property can’t be found in an object, JS looks for that property in a *delegate object*
   - Delegate objects can be chained 
+
+## Object
+
+```js
+const student = {
+	name: 'Jimmy',
+	year: 2,
+	sayName: function() {
+		log('My name is ' + this.name + '.')
+		// Q: what is the context of this?
+		// A: we don't know, until we call it
+	}
+}
+// student is an object, "this" refers to the object
+student.sayName() // My name is Jimmy.
+
+let mySayName = student.sayName;
+mySayName(); // undefined, without object, "this" has no reference
+```
+
+We can get this to work without having to explicitly call student.sayName()
+
+```js
+// Binding
+mySayName = student.sayName;
+const boundSayName = mySayName.bind(student)	// bind student as "this" to mySayName function
+boundSayName();
+```
+
+```js
+const whatYearAmI = function() {
+	log(this.year)
+}
+
+const student2 = {
+	name: 'Saul',
+	year: 3,
+	myYear: whatYearAmI,
+	nested: {
+		name: 'Jane',
+		year: 7,
+		myYear: whatYearAmI
+	}
+}
+student2.myYear();			// 3
+student2.nested.myYear();	// 7
+
+
+const student3 = {
+	name: 'Jane',
+	year: 7,
+	myYear: student2.myYear
+}
+student3.myYear(); 			// 7
+student3.myYear.bind(student2)();   // 3, student3.myYear's "this" now refers to student2
+student3.myYear.call(student2)		// 3, function called, no need to add "()"
+```
 
 
 
@@ -278,7 +407,11 @@ What does `new` do?
 
 
 
+# Notes
 
+Every object has a constructor, if `new` is not used to construct an object, the constructor may be the `Object` object itself.
+
+<img src="Javascript.assets/image-20191027202849594.png" alt="image-20191027202849594" style="zoom: 33%;" />
 
 
 
