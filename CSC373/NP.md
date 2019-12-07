@@ -123,6 +123,125 @@ i.e. SAT becomes deterministic if P=NP
 
 
 
+## MIT notes
+
+P = {problems solvable in polynomial time}
+
+NP = {decision problems (answer is YES or NO) solvable in nondeterministic polynomial time}
+
+Nondeterministic: can guess one out of polynoially many options in constant time.
+
+​	If any guess would lead to a YES answer, then we get such a guess. (Bias towards YES)
+
+### 3SAT (Satisfiability)
+
+Given Boolean form formula of the form $(x_1\vee x_3\vee \overline{x_6})\wedge (\overline{x_2}\vee x_3 \vee \overline{x_7})$
+
+Each clause has 3 literals, there can be many clauses. Each Literal is a binary variable $x_i$ or $\overline{x_i}$
+
+**Problem/Question:** Can you set the variables $\{x_i\}$ to $\{T,F\}$, such that the formula is True.
+
+This is a hard problem, we don't know if there is a polynomial time algorithm (probably there isn't), but there is a polynomial non-deterministic algo (Problem is in NP).
+
+Guess whether $x_i$ is true or false for all $i$, every guess takes constant time.
+
+If formula is true, return YES, NO otherwise.
+
+If there is some way to get the formula true, algo will return YES.
+
+Think of this as a verification algorithm.
+
+Given the guess, check the guess in polynomial time.
+
+Can only do that for YES answers. Not for NO answers. If some one say, there is no such solution the gives a YES answer, you have to check all combinations of the variables.
+
+There is a easy way to verify that it's true. Thus, it's a NP.
+
+### Equivalent Definition of NP:
+
+NP = {Decision problems with poly-size certificates & poly-time verifiers fir YES problems}
+
+Certificate is a guess of solution. And we can only guess something that's polynomial size (non-exponential).
+
+
+
+x is NP-hard if every problem $y\in NP$ reduces to $x$. $x$ is at least as hard as every problem in NP.
+
+x in NP-complete if x is NP and NP-hard. $x$ is exactly as hard as every problem in NP, no harder, no easier.
+
+**Reduction** from problem A to problem B = poly-time algo converting A inputs -> equivalent B inputs.
+
+Equivalent means: same YES/NO answer.
+
+**Difficulty:** 
+
+<img src="NP.assets/image-20191125020922452.png" alt="image-20191125020922452" style="zoom: 33%;" />
+
+$x$ is NP-hard $\Rightarrow$ $x\notin P$ unless P=NP.
+
+Since NP-hard is at least as hard as all NP, thus, if $P\neq NP$, NP-hard must be harder than P, and time larger than polytime is needed to solve for $x$.
+
+
+
+### Reduction
+
+**Reduction** from problem A to problem B = poly-time algo converting A inputs -> equivalent B inputs.
+
+Equivalent means: same YES/NO answer.
+
+If we know how to solve B, than we also know how to solve A.
+
+- Convert the inputs for A to inputs for B, run B's algo, and get the YES/NO decision for A.
+
+$B\in P\Rightarrow A\in P$
+
+$B\in NP\Rightarrow A\in NP$
+
+B is at least as hard as A.
+
+If we want to show that some problem x is NP-Hard, we need to show that every problem in NP can be reduced to x.
+
+
+
+## Proving problem is NP-Complete
+
+This means, problem is too hard and cannot be solved in polynomial time.
+
+1. $x\in NP$
+   1. Give non-deterministic poly-time algo
+   2. Certificate + verifier in poly-time
+2. Reduce from known NP-Complete problem $y$ to $x$, to show $x \in$ NP-Hard
+   - We cannot show it for all NP, thus show it for one NP-complete is enough, since NP-complete problem is both NP and NP-Hard, if a NP-Complete problem is reducible to $x$, $x$ is at least as hard as it, and thus $x$ is NP-Hard
+   - $z\in NP \rightarrow y\rightarrow x$, $\rightarrow$ means reducible. $x$ is also as hard as all NP, thus is NP-Hard.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
