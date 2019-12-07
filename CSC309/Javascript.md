@@ -270,8 +270,8 @@ typeof(a)	// "object", not a primitive type
 **Create Objects**
 
 ```js
-const student = { name: ‘Jimmy’, year: 2}; 
-const student = {“name”: ‘Jimmy’, “year”: 2}; // quotes are optional
+const student = { name: 'Jimmy', year: 2}; 
+const student = {"name": 'Jimmy', "year": 2}; // quotes are optional
 
 // Properties can be added and changed
 student.year = 3;
@@ -281,7 +281,7 @@ student.age = 20;
 ### Functions as properties
 
 ```js
-const student = { name: ‘Jimmy’, year: 2}; 
+const student = { name: 'Jimmy', year: 2}; 
 student.sayName = function() {
   console.log("My name is " + this.name);
 }
@@ -308,8 +308,8 @@ var student = {
   myName: getName
 };
 
-student.myName();		// "James"
-ourGetName = student.myName;	
+student.getName = getName;		
+ourGetName = student.getName;	
 ourGetName();			// undefined
 
 ourGetName.bind(student)();		// "James"
@@ -340,11 +340,28 @@ myObject.func();
 // output:
 // this.myVar = undefined
 // a = 5
+
+// The following would work
+const myObject = {
+  myVar: "bar",
+  func: function() {
+    const a = 5;
+    (() => {
+      console.log("this.myVar = " + this.myVar);
+      console.log("a = " + a);
+      return 1;
+    })();
+  }
+};
+myObject.func();
+
 ```
 
 `this` on line 6 is not undefined, otherwise, it's gonna be an error.
 
 `this` on line 6 actually refers to `Window` object, but `Window` doesn't have `myVar`, thus output undefined.
+
+nested functions don't have `this` inherited.
 
 ### Classes
 
@@ -610,7 +627,7 @@ log(jen2.whatsMyCourse());		// CSC108
    };
    const a = pizza1.getNumToppings(); // value of a? 								--- 3
    const b = pizza2.getNumToppings(); // value of a? 								--- 1
-   const c = num_toppings(); // value of a? 										--- error
+   const c = num_toppings(); 	//			 										--- error
    const d = num_toppings.bind(pizza1);
    const e = d(); // value of e? (or error?)										--- 3
    const k = pizza1.getNumToppings.call(pizza2); // value of k? (or error?)		--- 1

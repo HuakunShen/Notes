@@ -128,11 +128,9 @@ Protocols include: HTTP, FTP, SSH, SMTP, POP3...
 
 #### TCP
 
-- Recall:**Connection-oriented**
+- Recall: **Connection-oriented**
 
-  - Needs to have a pre-arranged 
-
-    connection before sending data 
+  - Needs to have a pre-arranged connection before sending data 
 
   - Should be **bi-directional**
 
@@ -147,7 +145,7 @@ Protocols include: HTTP, FTP, SSH, SMTP, POP3...
   - Losing packets is a real problem
 - If no acknowledgment that packet was received...
   - Packet sent again
-- TCPis**reliable**
+- TCP is **reliable**
   - But reacts to losing packets by slowing connection
   - **UDP** is not reliable, but doesn’t react to packet loss
 
