@@ -119,7 +119,7 @@ Client and Server use public-key encryption to agree on a shared pre-session sec
    1. Stored
       - Injected script is stored permanently on server
       - victim retrieves script from server through normal requests
-      - e.g. input中传一个``<script> alert('U R Hacked) </script>``, user may retrieve such malicious code and get error.
+      - e.g. input中传一个``<script> alert('U R Hacked') </script>``, user may retrieve such malicious code and get error.
       - e.g. `<strong>something</strong>` is passed in as input, when this displays, it's gonna be rendered as html element, things much worse than this could happen
    2. Reflected
    3. DOM-based
@@ -178,8 +178,8 @@ Client and Server use public-key encryption to agree on a shared pre-session sec
    
 
 7. Missing Function Level Access Control (检查是否authorized)
-   
-   
+  
+  
    - Modifies URL, changes parameter and gets access to data attacker is not authorized for
    - Often URL in frameworks refers directly to objects
      - Internal ids appear in URLs (REST)
