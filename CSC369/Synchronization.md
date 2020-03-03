@@ -1,5 +1,7 @@
 # Synchronization
 
+
+
 ## Semaphore (信号标)
 
 Semaphore value represents the number of threads that can pass through wait before it blocks.
@@ -135,11 +137,106 @@ Circular wait implies hold and wait, but the former results from a sequence of e
 
 
 
+### 1. Break Mutual Exclusion?
 
+// TODO
 
+### 2. Break Hold and Wait?
 
+**Problems:**
 
+- May wait a long time for all resources to be available at the same time
+- Must acqiore all locks at the start, rather than when they are really needed => limits concurrency
+- Some longer processes may hold locks for long time before they end up using them (blocking other processes)
+- May not know all resource requirements in advance
 
+**Alternative:**
+
+`trylock()` function is offered in some thread libraries: grab a lock if it's available, otherwise try later.
+
+<img src="Synchronization.assets/image-20200303033747703.png" alt="image-20200303033747703" style="zoom: 33%;" />
+
+`ready` means resource is ready. `L2` is the lock for the resource needed, has to lock `L2` first before current thread can access it. 
+
+// TODO
+
+### 3. Break No Pre-emption?
+
+When is it safe to take a resource away from another thread? 
+
+Can one thread pre-empt a thread in a critical section so that it can enter the critical section?
+
+**Generally: Not feasible, or too complex to achieve**
+
+### 4. Preventing Circular Wait
+
+Break "circular wait" - assign a linear ordering to resource types and require that a process holding a resource of one type, R, can only request resources that follow R in the ordering 
+
+Hard to come up with total order when there are  lots of resource types 
+
+Partial order, groups of locks with internal ordering, etc.
+
+### Other Strategies
+
+#### Deadlock Avoidance
+
+Use knowledge about the resources that each process might request to avoid moving into a state that might deadlock.
+
+#### Deadlock Detection 
+
+Use graph algorithms to identify deadlock.
+
+#### Deadlock Recovery
+
+- Tricky
+- Selectively kill processes?
+
+### Reality Check
+
+No single strategy for dealing with deadlock is appropriate for all resources in all situations 
+
+All strategies are costly in terms of computation overhead, or restricting use of resources 
+
+Most operating systems employ the "Ostrich Algorithm"
+
+> "Ignore the problem and hope it doesn't happen often"
+
+<img src="Synchronization.assets/image-20200303035019184.png" alt="image-20200303035019184" style="zoom:25%;" />
+
+### Why does the Ostrich Algorithm Work?
+
+**Recall the causes of deadlock:**
+
+- Resources are ﬁnite
+- Processes wait if a resource they need is unavailable
+- Resources may be held by other waiting processes 
+
+Prevention/Avoidance/Detection deal with the last 2 points 
+
+Modern operating systems virtualize most physical resources, eliminating the ﬁrst problem.
+
+Some logical resources can’t be virtualized (there must be exactly one), such as bank accounts or the process table 
+
+These are protected by synchronization objects, which are now the only resources that can cause deadlock
+
+### Communication Deadlocks
+
+Messages between communicating processes are a consumable resource
+
+Example:
+
+- Process B is waiting for a request 
+- Process A sends a request to B, and waits for reply 
+- The request message is lost in the network 
+- B keeps waiting for a request, A keeps waiting for a reply  =>  we have a deadlock!
+
+**Solution**
+
+Use timeouts, resend message and use protocols to detect duplicate messages (why need the latter?)
+
+TCP (Transmission Control Protocol) guarantees delivery.
+
+Duplicate messages can lead to duplicate response and if the state of process depends on the number requests, duplicate messages could mess up the state.
 
 
 
