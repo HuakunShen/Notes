@@ -1,5 +1,48 @@
 # File System
 
+## Extent-Based File System
+
+An extent == a disk pointer plus a length (in # of blocks), i.e., it allocates a few blocks in a row. 
+
+Instead of requiring a pointer to every block of a ﬁle, we just need a pointer to every extent (group of blocks).
+
+**Disadvantage:** Less ﬂexible than the pointer-based approach.  (External fragmentation?)
+
+**Advantages:** Uses smaller amount of metadata per ﬁle, and ﬁle allocation is more compact.
+
+Adopted by ext4, HFS+, NTFS, XFS.
+
+## Link-Based File System
+
+Instead of pointers to all blocks, the inode just has one pointer to the ﬁrst data block of the ﬁle, then the ﬁrst block points to the second block, etc.
+
+Works poorly if we want to access the last block of a big ﬁle.
+
+Use an in-memory File Allocation Table, indexed by address of data block 
+
+FAT ﬁle system, used by Windows before NTFS. 
+
+## Summary
+
+### Inodes 
+
+- Data structure representing a FS object (ﬁle, dir, etc.)
+- Attributes, disk block locations
+- No ﬁle name, just metadata!
+
+<img src="File-System.assets/image-20200303163835644.png" alt="image-20200303163835644" style="zoom: 25%;" />
+
+An Inode stores 15 pieces of address pointing to data blocks. The first 12 are direct pointers to data blocks. The 13th is a single indirect pointer, the 14th is a double indirect pointer, the 15th is a triple indirect pointer.
+
+Each indirect pointer points to another block of pointers. 4KB = 1024 pointers to 1024 data blocks. 
+
+### Directory
+
+- List of (name, inode) mappings (an entry)
+- Each directory entry: a ﬁle, other directory, link, itself (.), parent dir (..), etc.
+
+
+
 ## Journaling
 
 ### File System Reliability
