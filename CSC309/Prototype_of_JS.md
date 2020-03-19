@@ -1,5 +1,3 @@
-
-
 # Prototype and `__proto__`
 
 ```javascript
@@ -94,23 +92,21 @@ When some property/function is called with `.property`, direct properties in the
   - as the log above shows, `foo` is in `doSomething.prototype`
   - return `"bar"`
 
-
-
 # Objects created with syntax constructs
 
 ```js
-var o = {a: 1};
+var o = { a: 1 };
 
 // The newly created object o has Object.prototype as its [[Prototype]]
 // o has no own property named 'hasOwnProperty'
-// hasOwnProperty is an own property of Object.prototype. 
+// hasOwnProperty is an own property of Object.prototype.
 // So o inherits hasOwnProperty from Object.prototype
 // Object.prototype has null as its prototype.
 // o ---> Object.prototype ---> null
 
 var b = ['yo', 'whadup', '?'];
 
-// Arrays inherit from Array.prototype 
+// Arrays inherit from Array.prototype
 // (which has methods indexOf, forEach, etc.)
 // The prototype chain looks like:
 // b ---> Array.prototype ---> Object.prototype ---> null
@@ -119,7 +115,7 @@ function f() {
   return 2;
 }
 
-// Functions inherit from Function.prototype 
+// Functions inherit from Function.prototype
 // (which has methods call, bind, etc.)
 // f ---> Function.prototype ---> Object.prototype ---> null
 ```
@@ -127,13 +123,13 @@ function f() {
 # Create and Delete
 
 ```js
-var a = {a: 1};
+var a = { a: 1 };
 
-var b = Object.create(a); 
+var b = Object.create(a);
 
-console.log(a.a); // print 1 
+console.log(a.a); // print 1
 console.log(b.a); // print 1
-b.a=5;
+b.a = 5;
 console.log(a.a); // print 1
 console.log(b.a); // print 5
 delete b.a;
@@ -143,9 +139,8 @@ delete a.a;
 console.log(a.a); // print undefined
 console.log(b.a); // print undefined
 
-
 function Graph() {
-  this.vertices = [4,4];
+  this.vertices = [4, 4];
 }
 
 var g = new Graph();
@@ -176,20 +171,3 @@ var g = new Graph();
 // g is an object with own properties 'vertices' and 'edges'.
 // g.[[Prototype]] is the value of Graph.prototype when new Graph() is executed.
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
