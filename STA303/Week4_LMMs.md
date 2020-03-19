@@ -80,3 +80,44 @@ Linear mixed models are robust to violations of some of their assumptions.
 ### Random Slope
 
 `(1 + condition | subject)`
+
+## Fixed vs. Random Effects
+
+Fixed Effects: The things you care about and want to estimate.
+
+Random Effects: Variables that were opportunistically measured whose variation needs to be accounted for but that you are not necessarily interested in.
+
+## Do we really need a random effect?
+
+We can look at the Confidence Intervals for the estimated random effects. If they all overlap, we probably don't need them.
+
+## Difference between LM and LMM
+
+LM has smaller Confidence Intervals than that of LMM generally. 
+
+For LMM, we have less information from correlated data. Correlated data are counted as a single sample.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
