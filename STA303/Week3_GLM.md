@@ -100,3 +100,11 @@ What are the constraints on the vector of regression coefficients, $\beta$?
 
 Check histogram to see if data follow a specific distribution.
 
+### 判断一个variable是否有必要的方法
+
+Every variable corresponds to a $\beta$, the $\beta$ has an estimate after fitting a model, and the confidence interval can be obtained. If the confidence interval contain 0, then the variable may not be needed (没有作用). 
+
+$e^\beta$ is the odds ratio, $e^0=1$. Thus, if the odds ratio's confidence interval contain 1, the variable may not be needed. 
+
+These two methods are equivalent.
+
