@@ -57,7 +57,7 @@ w3schools (English): https://www.w3schools.com/python/
 
 # SQL Learning Resource
 
-> SQL是一种服务器引擎。可以理解它是一个软件（引擎），装在一台服务器（电脑上），这个电脑的硬盘存了大量的数据**(数据库)**，别的服务器（电脑）对这个数据库请求数据。但是不可能每次都要所有的数据，只要需要的一部分，所以SQL的语法就是SQL引擎用来从海量数据中找到你想要的数据的方法。你写出SQL query（请求：你想要什么信息），SQL引擎执行query，以**极快的速度**找到并返回你想要到信息。
+> SQL是一种服务器引擎。可以理解它是一个软件（引擎），装在一台服务器（电脑上），这个电脑的硬盘存了大量的数据 **(数据库)**，别的服务器（电脑）对这个数据库请求数据。但是不可能每次都要所有的数据，只要需要的一部分，所以SQL的语法就是SQL引擎用来从海量数据中找到你想要的数据的方法。你写出SQL query（请求：你想要什么信息），SQL引擎执行query，以**极快的速度**找到并返回你想要到信息。
 
 菜鸟教程（中文）：https://www.runoob.com/mysql/mysql-tutorial.html
 
@@ -79,6 +79,19 @@ YouTube是很好的资源，Python和SQL都有很多教程，质量非常好。�
 
 学python的话推荐用pycharm，pycharm community版就够了。
 
+但是VSCode是另一个我个人最喜欢的编辑器，支持几乎所有语言。
+
+如果你学data science的话，推荐使用VSCode+Jupyter Notebook.
+
+安装python的时候不用下载python原版，下载Anaconda，里面包含python和很多python的library。
+
+Anaconda是专门给data science用的。
+
+装好Anaconda后VSCode里就能打开Jupyter Notebook了。
+
+Jupyter Notebook的好处是可以一段一段的run code，写一点就查一下当前的数据对不对，传统的python都是一次性跑完的。这样没什么不好的，反而方便使用debugger，但是对data science和machine learning来说所有人都是使用jupyter notebook的。
+
 SQL的话用MySQL Workbench，若果你在电脑上装的引擎是MySQL的话。有很多不同的SQL，根据你选的教程来吧。
 
 选好一个教程后，第一步就是安装软件，安装的时候你可以问我。比如我见过菜鸟教程上安装软件搞得特别复杂，但是实际上没有特别复杂。
+
