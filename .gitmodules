@@ -1,0 +1,3 @@
+[submodule "LearnAI"]
+	path = LearnAI
+	url = https://github.com/HuakunShen/LearnAI.git
